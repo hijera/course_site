@@ -1,19 +1,79 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const isMenuOpen = ref(false);
+let touchStartX = 0;
 
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
+}
+
+// Следим за изменением состояния меню
+watch(isMenuOpen, (newValue) => {
+  if (newValue) {
+    // Блокируем прокрутку страницы при открытом меню
+    document.body.classList.add('no-scroll');
+    // Отображаем меню и только после этого делаем его видимым для анимации
+    const navElement = document.querySelector('.nav');
+    if (navElement) {
+      navElement.style.display = 'block';
+      // Используем setTimeout для запуска анимации после отображения элемента
+      setTimeout(() => {
+        navElement.classList.add('open');
+      }, 10);
+    }
+  } else {
+    // Сначала запускаем анимацию закрытия
+    const navElement = document.querySelector('.nav');
+    if (navElement) {
+      navElement.classList.remove('open');
+      // Скрываем элемент только после завершения анимации
+      setTimeout(() => {
+        navElement.style.display = 'none';
+        // Разрешаем прокрутку страницы при закрытом меню
+        document.body.classList.remove('no-scroll');
+      }, 300);
+    }
+  }
+});
+
+// Закрываем меню при изменении маршрута
+watch(() => router.currentRoute.value.path, () => {
+  closeMenu();
+});
+
+// Обработка свайпа для мобильных устройств
+function handleTouchStart(e) {
+  touchStartX = e.touches[0].clientX;
+}
+
+function handleTouchMove(e) {
+  if (!isMenuOpen.value) return;
+  
+  const touchEndX = e.touches[0].clientX;
+  const diffX = touchStartX - touchEndX;
+  
+  // Если свайп влево более 50 пикселей, закрываем меню
+  if (diffX > 50) {
+    closeMenu();
+  }
 }
 
 onMounted(() => {
   setTimeout(() => {
     document.body.classList.add('loaded');
   }, 500);
+  
+  // Добавляем обработчики событий свайпа
+  document.addEventListener('touchstart', handleTouchStart, { passive: true });
+  document.addEventListener('touchmove', handleTouchMove, { passive: true });
 });
+
+function closeMenu() {
+  isMenuOpen.value = false;
+}
 </script>
 
 <template>
@@ -26,16 +86,18 @@ onMounted(() => {
         </div>
       </div>
       
-      <button class="menu-toggle" @click="toggleMenu">
+      <button class="menu-toggle" :class="{ 'active': isMenuOpen }" @click="toggleMenu">
         <span></span>
         <span></span>
         <span></span>
       </button>
       
+      <div class="menu-overlay" v-if="isMenuOpen" @click="closeMenu"></div>
+      
       <nav class="nav" :class="{ 'open': isMenuOpen }">
         <ul class="nav-list">
           <li v-for="route in $router.options.routes" :key="route.path">
-            <router-link :to="route.path" @click="isMenuOpen = false">
+            <router-link :to="route.path" @click="closeMenu">
               {{ route.name }}
               <div class="link-underline"></div>
             </router-link>
@@ -89,6 +151,13 @@ body {
 
 body.loaded {
   opacity: 1;
+}
+
+body.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 
 .app-container {
@@ -159,6 +228,19 @@ body.loaded {
   height: 2px;
   background-color: var(--primary-color);
   transition: all 0.3s linear;
+}
+
+/* Анимация для кнопки меню-бургера */
+.menu-toggle.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
 }
 
 .nav-list {
@@ -312,17 +394,29 @@ body.loaded {
     height: 100vh;
     background: white;
     box-shadow: var(--box-shadow);
-    transition: right var(--transition-speed);
+    transition: all var(--transition-speed);
     z-index: 9;
+    visibility: hidden;
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+    display: none; /* Полностью скрываем меню с дисплея */
   }
   
   .nav.open {
     right: 0;
+    visibility: visible;
+    transform: translateX(0);
+    opacity: 1;
+    overflow-y: auto;
+    pointer-events: auto;
+    display: block; /* Показываем меню */
   }
   
   .nav-list {
     flex-direction: column;
     padding: 5rem 2rem 2rem;
+    width: 100%;
   }
   
   .nav-list li {
@@ -333,6 +427,30 @@ body.loaded {
     display: block;
     padding: 1rem 0;
     font-size: 1.2rem;
+  }
+}
+
+/* Оверлей для затемнения фона при открытом меню */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 8;
+  animation: fadeIn 0.3s ease;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  touch-action: none; /* Предотвращаем скролл на сенсорных устройствах */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>
