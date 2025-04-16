@@ -36,7 +36,10 @@ onMounted(() => {
         <div class="stars3"></div>
       </div>
       <div class="hero-content">
-        <h1 class="title">✨ СОЗДАЙТЕ СВОИ ПЕРВЫЕ ПРИЛОЖЕНИЯ С ПОМОЩЬЮ ИИ!</h1>
+        <h1 class="title">
+          <span class="emoji">✨</span>
+          <span>СОЗДАЙТЕ СВОИ ПЕРВЫЕ ПРИЛОЖЕНИЯ С ПОМОЩЬЮ ИИ!</span>
+        </h1>
         <h2 class="subtitle">Курс "Разработка для Каждого"</h2>
         <div class="hero-text">
           <p>Искусственный интеллект изменил подход как к нашей жизни, так и к разработке, но важно понимать как его реальные возможности, так и ограничения.</p>
@@ -243,6 +246,8 @@ onMounted(() => {
   padding: 2rem;
   max-width: 800px;
   z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .title {
@@ -253,15 +258,16 @@ onMounted(() => {
   background-clip: text;
   color: transparent;
   animation: titleGlow 5s ease-in-out infinite alternate;
+  word-wrap: break-word;
+  hyphens: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-@keyframes titleGlow {
-  from {
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-  }
-  to {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-  }
+.title .emoji {
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 .subtitle {
@@ -478,7 +484,11 @@ section.animated-in {
 /* Медиа-запросы */
 @media (max-width: 768px) {
   .title {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    padding: 0 0.5rem;
+    word-wrap: break-word;
+    line-height: 1.3;
+    text-align: center;
   }
   
   .subtitle {
@@ -491,6 +501,11 @@ section.animated-in {
   
   .hero {
     height: 70vh;
+  }
+  
+  .hero-content {
+    padding: 1rem;
+    width: 100%;
   }
 }
 
@@ -537,6 +552,73 @@ section.animated-in {
   .benefit-item, .cost-item, .disclaimer-item {
     padding: 1.5rem 2rem;
     font-size: 1.2rem;
+  }
+}
+
+/* Медиа-запросы для очень маленьких экранов */
+@media (max-width: 375px) {
+  .title {
+    font-size: 1.1rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .title .emoji {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
+  
+  .cta-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .hero-content {
+    padding: 0.5rem;
+  }
+  
+  .hero-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* Медиа-запросы для сверхмаленьких экранов */
+@media (max-width: 320px) {
+  .title {
+    font-size: 0.95rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .hero {
+    min-height: 450px;
+  }
+  
+  .cta-button {
+    padding: 0.7rem 1.3rem;
+    font-size: 0.9rem;
+  }
+  
+  .hero-text {
+    display: none;
+  }
+}
+
+@keyframes titleGlow {
+  from {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
   }
 }
 </style> 
