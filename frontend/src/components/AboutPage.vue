@@ -135,7 +135,7 @@ onMounted(() => {
           <div class="instructor-social">
             <div class="social-link">
               <span class="social-icon">📱</span>
-              <span>Telegram: @Hijera_Tg</span>
+              <a href="https://t.me/Hijera_Tg?text=Хочу на курс!" target="_blank">Telegram: @Hijera_Tg</a>
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@ onMounted(() => {
         <div class="cta-content">
           <h2 class="cta-title">Готовы начать свой путь в программировании?</h2>
           <p class="cta-text">Присоединяйтесь к нашему курсу и создайте свое первое приложение уже через несколько недель!</p>
-          <button class="cta-button">Записаться на курс</button>
+          <a href="https://t.me/Hijera_Tg?text=Хочу на курс!" class="cta-button" target="_blank">Записаться на курс</a>
         </div>
         <div class="floating-shapes">
           <div class="shape shape-1"></div>
@@ -430,8 +430,18 @@ onMounted(() => {
   transition: transform 0.3s;
 }
 
+.social-link a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
 .social-link:hover {
   transform: translateY(-3px);
+}
+
+.social-link:hover a {
+  color: var(--primary-color);
 }
 
 .social-icon {
@@ -477,6 +487,8 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.3s;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  display: inline-block;
 }
 
 .cta-button:hover {

@@ -42,7 +42,7 @@ onMounted(() => {
           <p>Искусственный интеллект изменил подход как к нашей жизни, так и к разработке, но важно понимать как его реальные возможности, так и ограничения.</p>
         </div>
         <div class="cta-container">
-          <button class="cta-button">Записаться на курс</button>
+          <a href="https://t.me/Hijera_Tg?text=Хочу на курс!" class="cta-button" target="_blank">Записаться на курс</a>
         </div>
       </div>
     </section>
@@ -145,7 +145,7 @@ onMounted(() => {
       <p class="section-text">Количество мест ограничено 10 участниками.</p>
       <p class="section-text">Формат: вебинары 1-2 раза в неделю</p>
       <div class="registration-info">
-        <p>Для записи напишите в личные сообщения (@Hijera_Tg): "Хочу на курс"</p>
+        <p>Для записи <a href="https://t.me/Hijera_Tg?text=Хочу на курс!" target="_blank">напишите в личные сообщения</a> или нажмите кнопку "Записаться на курс"</p>
       </div>
       <div class="hashtags">
         <span class="hashtag">#вайбкодинг</span>
@@ -291,6 +291,8 @@ onMounted(() => {
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  display: inline-block;
 }
 
 .cta-button:hover {
@@ -442,6 +444,19 @@ section.animated-in {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   text-align: center;
   font-weight: 500;
+}
+
+.registration-info a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.3s, border-bottom 0.3s;
+  border-bottom: 1px dashed var(--primary-color);
+}
+
+.registration-info a:hover {
+  color: var(--secondary-color);
+  border-bottom: 1px solid var(--secondary-color);
 }
 
 .hashtags {
