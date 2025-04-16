@@ -15,5 +15,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-  base: '/course_site_test/', // Имя репозитория GitHub
+  base: '/course_site/', // Имя репозитория GitHub
 })
